@@ -26,7 +26,8 @@ jobs:
         run: npm run build
 
       - name: Create release on GitHub
-        run: gh release create v${{ github.event.inputs.version }} \
+        run: |
+          gh release create v${{ github.event.inputs.version }} \
           --generate-notes -t "${{ github.event.repository.name }} ${{ github.event.inputs.version }}"
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
