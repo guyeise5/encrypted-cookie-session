@@ -3,6 +3,9 @@
   "version": "dev",
   "description": "Encrypted cookie based session middleware",
   "type": "module",
+  "repository": {
+    "url": "https://github.com/guyeise5/encrypted-cookie-session"
+  },
   "main": "build/index.js",
   "scripts": {
     "build": "tsc"
