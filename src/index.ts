@@ -7,17 +7,12 @@ import cookieParser from "cookie-parser";
 
 const separator = ":";
 
-type SecretOrKeys = {
-    secret: crypto.CipherKey
-    keys?: never
-} | {
-    keys: [crypto.CipherKey, ...crypto.CipherKey[]],
-    secret?: never
-}
 export type RouterOptions = {
     name?: string
     cookieOptions?: CookieOptions
-} & SecretOrKeys
+    keys: [crypto.CipherKey, ...crypto.CipherKey[]],
+
+}
 
 export type EncryptedCookieSession = {
     [key: string]: any
@@ -72,8 +67,8 @@ function readSession(keys: crypto.CipherKey[], cookie?: string): EncryptedCookie
 
 export default function(options: RouterOptions) {
     const name = options.name || "session"
-    const keys = options.keys ? options.keys : [options.secret]
-    const encKey = options.keys ? options.keys[0] : options.secret
+    const keys = options.keys
+    const encKey = options.keys[0]
     const router = Router()
     router.use(cookieParser())
     router.use((req,res,next) => {
