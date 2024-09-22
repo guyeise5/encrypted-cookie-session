@@ -1,0 +1,36 @@
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version to release
+        required: true
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: build project
+
+      - name: npm run build
+        run: build project
+
+      - name: Create release on GitHub
+        run: gh release create v${{ github.event.inputs.version }} \
+          --generate-notes -t "${{ github.event.repository.name }} ${{ github.event.inputs.version }}"
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
