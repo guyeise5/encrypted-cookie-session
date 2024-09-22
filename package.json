@@ -1,6 +1,6 @@
 {
   "name": "encrypted-cookie-session",
-  "version": "1.0.0",
+  "version": "dev",
   "description": "Encrypted cookie based session middleware",
   "type": "module",
   "main": "build/index.js",
