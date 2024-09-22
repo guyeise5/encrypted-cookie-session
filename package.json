@@ -6,10 +6,20 @@
   "repository": {
     "url": "git+https://github.com/guyeise5/encrypted-cookie-session.git"
   },
-  "main": "build/index.js",
+  "main": "build/cjs/index.js",
   "scripts": {
-    "build": "tsc",
-    "prepack": "npmignore --auto"
+    "prepack": "npmignore --auto",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:dec",
+    "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > ./build/cjs/package.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:dec": "tsc -p tsconfig.dec.json",
+    "clean": "rm -rf ./build"
+  },
+  "exports": {
+    "types": "./build/types/index.d.ts",
+    "import": "./build/esm/index.js",
+    "require": "./build/cjs/index.js",
+    "default": "./build/cjs/index.js"
   },
   "publishConfig": {
     "ignore": [
@@ -18,7 +28,7 @@
       "test/",
       ".github/",
       ".gitignore",
-      "tsconfig.json"
+      "tsconfig*.json"
     ]
   },
   "keywords": [],
