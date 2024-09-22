@@ -4,7 +4,7 @@
   "description": "Encrypted cookie based session middleware",
   "type": "module",
   "repository": {
-    "url": "https://github.com/guyeise5/encrypted-cookie-session"
+    "url": "git+https://github.com/guyeise5/encrypted-cookie-session.git"
   },
   "main": "build/index.js",
   "scripts": {
