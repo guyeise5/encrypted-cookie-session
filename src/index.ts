@@ -20,7 +20,7 @@ export type RouterOptions = {
 } & SecretOrKeys
 
 export type EncryptedCookieSession = {
-    [key: string]: string | boolean | number
+    [key: string]: any
 }
 
 declare global {
