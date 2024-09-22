@@ -43,18 +43,89 @@ app.listen(3000, () => {
 });
 ```
 
+### Configuration Options
+
+- **`keys`**(required):
+    - **Description**: An array of secret keys used for encrypting and decrypting the session data. This allows for key rotation. Each key must be 32 bytes. The data is always encrypted using `keys[0]` but can be decrypted with each one of the keys 
+    - **Type**: `crypto.CipherKey[]`
+    - **Code Example**:
+      ```javascript
+      app.use(cookieSession({
+        keys: [Buffer.from('a3c7a2aa31e6abf736d537dbc99d769119cba30454f5ee05f4af2252e97d27be', 'hex'), Buffer.from('8ca500040ec4bbd8aedaafc83393547761946cb20dc49bb01c86b389187a387e', 'hex')]       
+      }));
+      ```
+
+- **`name`**:
+    - **Description**: The name of the session cookie.
+    - **Type**: `String`
+    - **Default**: `'session'`
+    - **Code Example**:
+      ```javascript
+      app.use(cookieSession({
+        name: 'my_session_cookie',
+      }));
+      ```
+
+- **`cookieOptions.maxAge`**:
+    - **Description**: The maximum age of the session cookie in milliseconds. This determines how long the session will be valid.
+    - **Type**: `Number`
+    - **Code Example**:
+      ```javascript
+      app.use(cookieSession({
+        cookieOptions: {
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
+        }
+      }));
+      ```
+
+- **`cookieOptions.secure`**:
+    - **Description**: Ensures the cookie is only sent over HTTPS. This is highly recommended for production environments to enhance security.
+    - **Type**: `Boolean`
+    - **Code Example**:
+      ```javascript
+      app.use(cookieSession({
+        cookieOptions: {
+            secure: true
+        }
+      }));
+      ```
+
+- **`cookieOptions.httpOnly`**:
+    - **Description**: Ensures the cookie is not accessible via JavaScript, which helps mitigate certain types of attacks such as cross-site scripting (XSS).
+    - **Type**: `Boolean`
+    - **Code Example**:
+      ```javascript
+      app.use(cookieSession({
+        cookieOptions: {
+            httpOnly: true
+      }
+      }));
+      ```
+
+- **`cookieOptions.sameSite`**:
+    - **Description**: Controls whether the cookie is sent with cross-site requests, providing some protection against cross-site request forgery (CSRF) attacks.
+    - **Type**: `String`
+    - **Code Example**:
+      ```javascript
+      app.use(cookieSession({
+        cookieOptions: {
+            sameSite: 'Strict'
+        }
+      }));
+      ```
+
+These examples should help you configure the `encrypted-cookie-session` middleware to suit your application's needs. If you have any more questions or need further assistance, feel free to ask!
+
 ## Key Rotation
 
 For added security, you can rotate your encryption keys periodically. Add the new key to your configuration and keep the old key temporarily to avoid invalidating active sessions:
 
 ```javascript
 app.use(cookieSession({
-  name: 'session',
   keys: [
       Buffer.from('a3c7a2aa31e6abf736d537dbc99d769119cba30454f5ee05f4af2252e97d27be', 'hex'), // current key
       Buffer.from('8ca500040ec4bbd8aedaafc83393547761946cb20dc49bb01c86b389187a387e', 'hex') // old key
   ],
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }));
 ```
 
