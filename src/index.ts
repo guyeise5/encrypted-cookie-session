@@ -82,7 +82,7 @@ function isEmpty(obj: object) {
     return Object.keys(obj).length === 0;
 }
 
-const router =  function(options: RouterOptions) {
+export default function(options: RouterOptions) {
     const name = options.name || "session"
     const keys = options.keys
     const encKey = options.keys[0]
@@ -122,4 +122,3 @@ const router =  function(options: RouterOptions) {
 
     return router;
 }
-module.exports = router
