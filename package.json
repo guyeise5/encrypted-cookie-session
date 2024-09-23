@@ -34,7 +34,12 @@
       ".babelrc"
     ]
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "router",
+    "session",
+    "middleware"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
