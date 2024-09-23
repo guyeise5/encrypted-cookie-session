@@ -34,6 +34,9 @@
       ".babelrc"
     ]
   },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
   "keywords": [
     "express",
     "router",
@@ -41,7 +44,7 @@
     "middleware"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "express": "^4.21.0",
