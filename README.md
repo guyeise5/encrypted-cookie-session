@@ -43,6 +43,15 @@ app.listen(3000, () => {
 });
 ```
 
+### Deleting the session
+Deleting the session is as easy as setting the session to `{}`
+```javascript
+app.get("/logout", (req,res,next) => {
+    req.session = {}
+    next();
+})
+```
+
 ### Configuration Options
 
 - **`keys`**(required):
