@@ -122,6 +122,4 @@ const router =  function(options: RouterOptions) {
 
     return router;
 }
-module.exports = router
-module.exports.default = router
 export default router

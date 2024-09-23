@@ -110,5 +110,6 @@
   },
   "include": [
     "src"
-  ]
+  ],
+  "exclude": ["examples"]
 }
