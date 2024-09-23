@@ -19,7 +19,14 @@ export type EncryptedCookieSession = {
 }
 
 export type SessionOptions = {
+    /**
+     * Additional options to add to the cookie
+     */
     cookieOptions: CookieOptions
+    /**
+     * true if the session is new, false otherwise
+     */
+    isNew: boolean
 }
 
 declare global {
@@ -71,6 +78,10 @@ function readSession(keys: crypto.CipherKey[], cookie?: string): EncryptedCookie
     }
 }
 
+function isEmpty(obj: object) {
+    return Object.keys(obj).length === 0;
+}
+
 export default function(options: RouterOptions) {
     const name = options.name || "session"
     const keys = options.keys
@@ -78,10 +89,11 @@ export default function(options: RouterOptions) {
     const router = Router()
     router.use(cookieParser())
     router.use((req,res,next) => {
-        req.sessionOptions = {
-            cookieOptions: {}
-        }
         req.session = readSession(keys, req.cookies[name])
+        req.sessionOptions = {
+            cookieOptions: {},
+            isNew: isEmpty(req.session)
+        }
         const originalSession = JSON.stringify(req.session)
         onHeaders(res, () => {
             const serializedSession = JSON.stringify(req.session)
@@ -92,7 +104,7 @@ export default function(options: RouterOptions) {
 
             const cookieOptions = {...options.cookieOptions, ...req.sessionOptions.cookieOptions}
 
-            if(Object.keys(req.session).length === 0) {
+            if(isEmpty(req.session)) {
                 res.clearCookie(name, cookieOptions)
                 return;
             }

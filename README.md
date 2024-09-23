@@ -127,9 +127,20 @@ app.get("/logout", (req,res,next) => {
 You can choose the cookie options based on the request
 using `sessionOptions.cookieOptions`
 ```javascript
-req.get("/", (req,res, next) => {
+req.get("/", (req,res,next) => {
     req.sessionOptions.cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000 // 1 week
     next()
+})
+```
+### Checking for new session
+New session can be checked using `sessionOptions.isNew`
+```javascript
+req.get("/login", (req,res,next) => {
+    if(req.sessionOptions.isNew) {
+        // do login
+    } else {
+        return res.redirect("/")
+    }
 })
 ```
 
