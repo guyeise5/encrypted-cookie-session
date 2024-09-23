@@ -18,11 +18,16 @@ export type EncryptedCookieSession = {
     [key: string]: any
 }
 
+export type SessionOptions = {
+    cookieOptions: CookieOptions
+}
+
 declare global {
     namespace Express {
         // noinspection JSUnusedGlobalSymbols
         export interface Request {
             session: EncryptedCookieSession
+            sessionOptions: SessionOptions
         }
     }
 }
@@ -73,6 +78,9 @@ export default function(options: RouterOptions) {
     const router = Router()
     router.use(cookieParser())
     router.use((req,res,next) => {
+        req.sessionOptions = {
+            cookieOptions: {}
+        }
         req.session = readSession(keys, req.cookies[name])
         const originalSession = JSON.stringify(req.session)
         onHeaders(res, () => {
@@ -81,13 +89,21 @@ export default function(options: RouterOptions) {
             if(serializedSession == originalSession) {
                 return;
             }
+
+            const cookieOptions = {...options.cookieOptions, ...req.sessionOptions.cookieOptions}
+
+            if(Object.keys(req.session).length === 0) {
+                res.clearCookie(name, cookieOptions)
+                return;
+            }
+
             const plain = Buffer.from(serializedSession)
             const iv = crypto.randomBytes(16);
             const cipherData = encrypt(plain, encKey, iv)
             const signData = Buffer.concat([iv, cipherData])
             const sig = sign(signData, encKey)
             const s = [sig.toString('base64'), iv.toString('base64'), cipherData.toString('base64')].join(separator)
-            res.cookie(name, s, options.cookieOptions || {})
+            res.cookie(name, s, cookieOptions)
         })
         next()
     })
