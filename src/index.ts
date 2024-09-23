@@ -122,4 +122,5 @@ const router =  function(options: RouterOptions) {
 
     return router;
 }
+
 export default router
