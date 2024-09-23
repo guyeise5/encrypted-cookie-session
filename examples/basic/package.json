@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "encrypted-cookie-session": "^1.6.4"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
