@@ -123,9 +123,19 @@ app.get("/logout", (req,res,next) => {
       }));
       ```
 
+### Dynamic cookie options
+You can choose the cookie options based on the request
+using `sessionOptions.cookieOptions`
+```javascript
+req.get("/", (req,res, next) => {
+    req.sessionOptions.cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000 // 1 week
+    next()
+})
+```
+
 These examples should help you configure the `encrypted-cookie-session` middleware to suit your application's needs. If you have any more questions or need further assistance, feel free to ask!
 
-## Key Rotation
+### Key Rotation
 
 For added security, you can rotate your encryption keys periodically. Add the new key to your configuration and keep the old key temporarily to avoid invalidating active sessions:
 
