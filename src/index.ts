@@ -52,7 +52,8 @@ function readSession(keys: crypto.CipherKey[], cookie?: string): EncryptedCookie
         return {}
     }
 
-    const key = keys.find(k => sig.equals(sign(cipherData,k)))
+    const signData = Buffer.concat([iv, cipherData])
+    const key = keys.find(k => sig.equals(sign(signData,k)))
     if(!key) {
         return {}
     }
@@ -83,7 +84,8 @@ export default function(options: RouterOptions) {
             const plain = Buffer.from(serializedSession)
             const iv = crypto.randomBytes(16);
             const cipherData = encrypt(plain, encKey, iv)
-            const sig = sign(cipherData, encKey)
+            const signData = Buffer.concat([iv, cipherData])
+            const sig = sign(signData, encKey)
             const s = [sig.toString('base64'), iv.toString('base64'), cipherData.toString('base64')].join(separator)
             res.cookie(name, s, options.cookieOptions || {})
         })
