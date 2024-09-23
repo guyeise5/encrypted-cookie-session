@@ -124,3 +124,4 @@ const router =  function(options: RouterOptions) {
 }
 module.exports = router
 module.exports.default = router
+export default router
