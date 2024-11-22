@@ -1,0 +1,27 @@
+name: ci
+on:
+  pull_request:
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16, 18, 20, 22]
+    runs-on: ubuntu-latest
+    name: nodejs ${{ matrix.node-version }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm run build
+  buildall:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Verify npm
+    needs: build
+    steps:
+      - name: Check build matrix status
+        if: ${{ needs.build.result != 'success' }}
+        run: exit 1
