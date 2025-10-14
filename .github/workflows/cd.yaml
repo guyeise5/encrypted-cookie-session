@@ -18,7 +18,7 @@ jobs:
       - name: Update package json
         run: yq -i '.version="${{ github.event.inputs.version }}"' package.json
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'npm'
